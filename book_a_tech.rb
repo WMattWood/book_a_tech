@@ -83,8 +83,17 @@ class Tech
     @days_off = [] # array of dates where the tech is not available.
   end
 
-  def not_available(given_date)
+  def not_available(start_date, end_date=start_date)
+    dates = []
+    # from start_date until end_date, push each day into an array call 'dates'
+    dates.each do |day|
+      days_off << day
+    end
   end
+
+  private
+
+  attr_writer :days_off
 end
 
 
@@ -96,12 +105,14 @@ class Gig # Collaborator objects include: Client, Venue, Date?, CallList
   # method below.  So the human on the other side of the form would be manually
   # entering in the client name, venue name, date, and call list.  
 
-  def initialize(client, venue, date, call_list)
+  def initialize(client, venue, date, call_time, call_list, notes=nil)
     # @@id = id ??? needs to count up as we make gigs?  
     @client = client # pass in a client object
     @venue = venue # pass in a venue object
     @date = date # date of the event - maybe use Google Calendar date?  
+    @call_time = call_time # should be a string... 
     @call_list = call_list # a CallList instance object
+    @notes = notes # ie. "Call Time 6h00 @ Metro Joliette"
   end
 
   def fill_position(position, tech)
@@ -122,9 +133,18 @@ class Gig # Collaborator objects include: Client, Venue, Date?, CallList
     call_list.all? {|position, filled| filled }
   end
 
+  def id
+    # need to generate a unique id for each booking
+    # should we have separate markers for montage/demontage?
+  end
+
   def to_s
     "#{client.name}_#{venue.name}_#{id_number}"
   end
+
+  private
+  
+  attr_writer :call_list
 end
 
 
