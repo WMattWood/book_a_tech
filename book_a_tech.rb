@@ -293,11 +293,20 @@ include MessageSystem
   def send_gig_request
     # upon successful client request submission (and adding gig to calendar...)
     # ...send out a mass text to all tech who are available on the gig.date
+
+    # for each Tech in Techs
+    # - check if the date of the gig request is located in Tech.days_off
+    # - if not, send a text to Tech.phone 
   end
 
   def confirm_tech_booking
     # upon receiving acceptance text from Tech, send out a confirmation text 
     # ...confirming the booking and providing Tech with details.
+
+    # when acceptance text is received from Tech
+    # - populate Gig.call_list[position] with Tech.name
+    # - add the Gig object to Tech.gigs // or maybe just add Gig.id to Tech.gigs (#add_to_call_list method below)
+    # - send confirmation text to Tech.phone
   end
 
   def add_to_call_list # (optional method... might be extraneous)
@@ -306,6 +315,11 @@ include MessageSystem
 
   def send_reminders
     # text all the techs booked on a given day 24hrs in advance
+    
+    # every day at 11:59am
+    # - pull all gigs from today's date plus one day
+    # - for each tech in the Gig's call list
+      # - send a text to Tech.phone with a reminder message
   end
 
   def send_receipt
