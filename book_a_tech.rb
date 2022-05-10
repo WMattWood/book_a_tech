@@ -4,9 +4,10 @@
 
 # many objects below will need to be manually created via a human.  To start with,
 # this human will just be Justin.  As we onboard sw_clients, they can send us their
-# own gig_client sheets which we can pre-populate into a webform for them.  This 
-# would have to be a separate little utility (which should not interact with this 
-# codebase) that could take a formatted .xml file to load in values.  Oooooooor
+# own gig_client sheets which we can pre-populate into a webform for them (or do I
+# actually mean populate into a database? from which it would populate a webform?)
+# This would have to be a separate little utility (which should not interact with 
+# this codebase) that could take a formatted .xml file to load in values.  Oooooooor
 # again could be done manually.
 # THE POINT HERE BEING: at first all gigs are punched in by hand by Justin, but
 # over time it could be possible for gig_clients to be given accounts and they could
