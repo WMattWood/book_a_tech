@@ -63,14 +63,6 @@ class Calendar
   end
 end
 
-class Date
-  # decide some portable format for date which can be passed throughout program
-  # options...
-    # Jan, Fev, Mar, Avr, Mai, Jun, Jul, Aug, Sep, Oct, Nov, Dec
-    # Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec
-    # Jan 22 2022 (MONDAY)
-end
-
 class Tech
   
   def initialize(name, email='bookings@justinsinbox.com', phone='justinsphonenumber', address, dept)
@@ -98,21 +90,21 @@ end
 
 
 
-class Gig # Collaborator objects include: Client, Venue, Date?, CallList
+class Gig # Collaborator objects include: Client, Venue, Date, CallList
   # Similar to notes on CallList below, this object may need to connect with
   # a webform of some kind.  Information pulled from the webform could include
   # ...well shit it could include all of the variables we use in the constructor
   # method below.  So the human on the other side of the form would be manually
   # entering in the client name, venue name, date, and call list.  
 
-  def initialize(client, venue, date, call_time, call_list, notes=nil)
-    # @@id = id ??? needs to count up as we make gigs?  
+  def initialize(client, venue, date, call_time, call_list, notes=nil)  
     @client = client # pass in a client object
     @venue = venue # pass in a venue object
     @date = date # date of the event - maybe use Google Calendar date?  
-    @call_time = call_time # should be a string... 
     @call_list = call_list # a CallList instance object
+    @call_time = call_time # should be a string... 
     @notes = notes # ie. "Call Time 6h00 @ Metro Joliette"
+    # @@id = id ??? needs to count up as we make gigs?
   end
 
   def fill_position(position, tech)
@@ -133,6 +125,10 @@ class Gig # Collaborator objects include: Client, Venue, Date?, CallList
     call_list.all? {|position, filled| filled }
   end
 
+  def add_notes(string)
+    notes = string
+  end
+
   def id
     # need to generate a unique id for each booking
     # should we have separate markers for montage/demontage?
@@ -144,12 +140,43 @@ class Gig # Collaborator objects include: Client, Venue, Date?, CallList
 
   private
   
-  attr_writer :call_list
+  attr_writer :call_list, :notes
 end
 
+class Venue # Collaborator object to Gig
+  
+  def initialize(name, address, iatse=false, not_central=false)
+    @name = name # Name of the venue... PDC, CentreBell, PlaceBell, etc.)
+    @address = address # Address of the venue
+    @iatse = iatse # Status of IATSE certification/requirement
+    @not_central = not_central # Whether or not the venue is accessible by metro or requires car/uber
+  end
+end
 
+class Date # Collaborator object to Gig
+  # decide some portable format for date which can be passed throughout program
+  # options...
+    # Jan, Fev, Mar, Avr, Mai, Jun, Jul, Aug, Sep, Oct, Nov, Dec
+    # Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec
+    # Jan 22 2022 (MONDAY)
 
-class CallList # possible collaborator to Client and Gig??
+  def to_s
+    "#{month} #{day} #{year} (#{day_of_the_week})"
+  end
+end
+
+class Client # Collaborator object to Gig, BookingSystem
+
+  def initialize(name, email='bookings@justinsinbox.com', phone='justinsphonenumber', address, responsable)
+    @name = name # company name (ie. Spectra)
+    @email = email # email address for sending billing information
+    @phone = phone # formatted phone string, used for office purposes
+    @address = address # billing address for company
+    @responsable = responsable # string - the person who manages payments (Mariejo, Francis, Yves, etc)
+  end
+end
+
+class CallList # Collaborator object to Gig
   # this object may pull data from a webform...
     # the webform may take the following shape...
       # How many lighting techs do you need?
@@ -170,12 +197,17 @@ class CallList # possible collaborator to Client and Gig??
   # { 'LX 001' => nil, 'LX 002' => nil, 'Audio 001' => nil}
   attr_reader :positions
 
-  def initialize
-    @positions = {}
+  def initialize(gig_request_xml)
+    @positions = parse(gig_request_xml)
   end
 
   def parse(xml)
-    # this would be a method that would parse xml file into an appropriate hash
+    # output = {}
+    # file.each_line do |line1, line2|
+    #   output[line1] = line2
+    # end
+    # output
+    # # this would be a method that would parse xml file into an appropriate hash
   end
 
   def to_s
@@ -186,32 +218,6 @@ class CallList # possible collaborator to Client and Gig??
 
   attr_reader :positions
 end
-
-
-
-class Client # Collaborator object to Gig, BookingSystem
-
-  def initialize(name, email='bookings@justinsinbox.com', phone='justinsphonenumber', address, responsable)
-    @name = name # company name (ie. Spectra)
-    @email = email # email address for sending billing information
-    @phone = phone # formatted phone string, used for office purposes
-    @address = address # billing address for company
-    @responsable = responsable # string - the person who manages payments (Mariejo, Francis, Yves, etc)
-  end
-end
-
-
-
-class Venue # Collaborator object to Gig
-  
-  def initialize(name, address, iatse=false, not_central=false)
-    @name = name # Name of the venue... PDC, CentreBell, PlaceBell, etc.)
-    @address = address # Address of the venue
-    @iatse = iatse # Status of IATSE certification/requirement
-    @not_central = not_central # Whether or not the venue is accessible by metro or requires car/uber
-  end
-end
-
 
 
 class BookingSystem # Orchestration system
