@@ -166,6 +166,7 @@ class Tech
   attr_writer :days_off
 end
 
+#### COLLAB
 class Client # Collaborator object to Gig, BookingSystem
 
   def initialize(name, email='bookings@justinsinbox.com', phone='justinsphonenumber', address, responsable)
@@ -177,6 +178,7 @@ class Client # Collaborator object to Gig, BookingSystem
   end
 end
 
+#### COLLAB 
 class Venue # Collaborator object to Gig
   
   def initialize(name, address, iatse=false, not_central=false)
@@ -187,6 +189,7 @@ class Venue # Collaborator object to Gig
   end
 end
 
+#### COLLAB
 class Date # Collaborator object to Gig
   # decide some portable format for date which can be passed throughout program
   # options...
@@ -199,6 +202,7 @@ class Date # Collaborator object to Gig
   end
 end
 
+#### COLLAB
 class CallList # Collaborator object to Gig
   # this object may pull data from a webform...
     # the webform may take the following shape...
@@ -248,6 +252,7 @@ class CallList # Collaborator object to Gig
   end
 end
 
+#############################################################
 ######### THE WAY TO GET THE GIGS INTO THE CALENDAR #########
 class BookingSystem # Orchestration system
 include DatabaseManagement
