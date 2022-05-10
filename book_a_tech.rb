@@ -239,6 +239,7 @@ end
 
 class BookingSystem # Orchestration system
 include DatabaseManagement
+include MessageSystem
 
   def submit_gig_request
     # receive a client request submission
@@ -321,6 +322,18 @@ module DatabaseManagement
 
   def push_to_database(object)
     #push the item to the database
+  end
+end
+
+module MessageSystem
+
+  def send_sms(text)
+  end
+
+  def receive_sms(sms_object)
+  end
+
+  def send_email(text_body)
   end
 end
 
