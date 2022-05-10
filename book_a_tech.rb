@@ -111,7 +111,7 @@ class Gig # Collaborator objects include: Client, Venue, Date, CallList
     call_list[position] = tech
   end
 
-  # EXAMPLE OF A CALL TO:  (Gig)#fill_position
+  # EXAMPLE OF A CALL TO: (Gig)#fill_position
   # spectre_pdc_05032022.fill_position('lx001', 'Matthew Wood')
   # spectre_pdc_05032022.fill_position('lx002', 'Justin Tanguir')
   # spectre_pdc_05032022.fill_position('vid001', 'Ollis Seaworth')
@@ -129,7 +129,7 @@ class Gig # Collaborator objects include: Client, Venue, Date, CallList
     notes = string
   end
 
-  def id
+  def id_number
     # need to generate a unique id for each booking
     # should we have separate markers for montage/demontage?
   end
@@ -138,9 +138,30 @@ class Gig # Collaborator objects include: Client, Venue, Date, CallList
     "#{client.name}_#{venue.name}_#{id_number}"
   end
 
+  def description
+    "CREW CALL for #{self.date} @ #{self.venue} #{self.call_time}\nNOTES: #{self.notes}"
+  end
+
+  def display_call_list
+    call_list.each do |position, _|
+      puts position
+    end
+  end
+
   private
   
   attr_writer :call_list, :notes
+end
+
+class Client # Collaborator object to Gig, BookingSystem
+
+  def initialize(name, email='bookings@justinsinbox.com', phone='justinsphonenumber', address, responsable)
+    @name = name # company name (ie. Spectra)
+    @email = email # email address for sending billing information
+    @phone = phone # formatted phone string, used for office purposes
+    @address = address # billing address for company
+    @responsable = responsable # string - the person who manages payments (Mariejo, Francis, Yves, etc)
+  end
 end
 
 class Venue # Collaborator object to Gig
@@ -162,17 +183,6 @@ class Date # Collaborator object to Gig
 
   def to_s
     "#{month} #{day} #{year} (#{day_of_the_week})"
-  end
-end
-
-class Client # Collaborator object to Gig, BookingSystem
-
-  def initialize(name, email='bookings@justinsinbox.com', phone='justinsphonenumber', address, responsable)
-    @name = name # company name (ie. Spectra)
-    @email = email # email address for sending billing information
-    @phone = phone # formatted phone string, used for office purposes
-    @address = address # billing address for company
-    @responsable = responsable # string - the person who manages payments (Mariejo, Francis, Yves, etc)
   end
 end
 
