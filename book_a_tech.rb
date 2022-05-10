@@ -81,29 +81,40 @@ class Gig # Collaborator objects include: Client, Venue, Date, CallList
     # @@id = id ??? needs to count up as we make gigs?
   end
 
-  def fill_position(position, tech)
-    call_list[position] = tech
-  end
+    #### FOR ALL THESE CALL LIST METHODS - CONSIDER MOVING THEM INTO THE
+    #### CALL LIST CLASS.  THIS WOULD ALLOW YOU TO MANIPULATE THE ORIGINAL
+    #### CALL LIST OBJECT DIRECTLY, RATHER THAN MANIPULATING THE LOCAL COPY
+    #### ASSIGNED TO THE INSTANCE VARIABLE @call_list - HOWEVER THIS DOES
+    #### HAVE THE DRAWBACK OF DECENTRALIZING ALL THE METHOD CALLS.  KEEPING
+    #### THE METHODS INSIDE OF THE GIG CLASS KIND OF KEEPS THINGS VERY CENTRAL.
+    #### WHEREVER WE NEED TO FUCK WITH THE GIG OUTSIDE OF THE DEFINITION, THE 
+    #### SYNTAX WILL BE RESTRICTED TO gig.fill_position OR gig.display_call_list
+    #### THIS ALLOWS US TO MAINTAIN A VERY SIMPLE MENTAL MODEL - WE DONT NEED
+    #### TO REMEMBER WHEN WE ARE MANIPULATING A CALL_LIST OBJECT OR A GIG OBJECT
+    #### ----- MAYBE MAKE CALL LIST A SUB CLASS OF GIG? ----- ####
+    def fill_position(position, tech)
+      call_list[position] = tech
+    end
 
-  # EXAMPLE OF A CALL TO: (Gig)#fill_position
-  # spectre_pdc_05032022.fill_position('lx001', 'Matthew Wood')
-  # spectre_pdc_05032022.fill_position('lx002', 'Justin Tanguir')
-  # spectre_pdc_05032022.fill_position('vid001', 'Ollis Seaworth')
-  # spectre_pdc_05032022.fill_position('vid001', 'Ollis Seaworth')
+    # EXAMPLE OF A CALL TO: (Gig)#fill_position
+    # spectre_pdc_05032022.fill_position('lx001', 'Matthew Wood')
+    # spectre_pdc_05032022.fill_position('lx002', 'Justin Tanguir')
+    # spectre_pdc_05032022.fill_position('vid001', 'Ollis Seaworth')
+    # spectre_pdc_05032022.fill_position('vid001', 'Ollis Seaworth')
 
-  def cancel_position(position)
-    call_list[position] = nil
-  end
+    def cancel_position(position)
+      call_list[position] = nil
+    end
 
-  def call_list_filled?
-    call_list.all? {|position, filled| filled }
-  end
+    def call_list_filled?
+      call_list.all? {|position, filled| filled }
+    end
 
-  def display_call_list 
-    # returns an array of all the techs on the call
-    techs = call_list.values.delete(nil)
-    techs
-  end
+    def display_call_list 
+      # returns an array of all the techs on the call
+      techs = call_list.values.delete(nil)
+      techs
+    end
 
   def add_notes(string)
     notes = string
