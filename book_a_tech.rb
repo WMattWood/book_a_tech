@@ -204,12 +204,18 @@ class CallList # Collaborator object to Gig
       # How many show_followspot techs do you need
       # How many show_stagehand techs do you need
 
-  # a call list will be a hash object
+  # the call list 'positions' property will be a hash object
   # { 'LX 001' => nil, 'LX 002' => nil, 'Audio 001' => nil}
   attr_reader :positions
 
   def initialize(gig_request_xml)
     @positions = parse(gig_request_xml)
+  end
+
+  def unfilled_positions 
+    # returns an array of all unfilled roles in the call list
+    unfilled_positions = positions.select { |position, tech| tech }
+    unfilled_positions.map { |position, tech| position }
   end
 
   private
@@ -232,6 +238,7 @@ end
 
 
 class BookingSystem # Orchestration system
+include DatabaseManagement
 
   def submit_gig_request
     # receive a client request submission
@@ -276,9 +283,10 @@ class BookingSystem # Orchestration system
     # returns call_time as a string
   end
 
-  def add_gig_to_calendar
+  def add_gig_to_calendar(gig)
     # upon successful client request submission...
     # ...add the gig to the appropriate date on the calendar.
+    push_to_database(gig)
   end
 
   def send_gig_request
@@ -310,6 +318,10 @@ class BookingSystem # Orchestration system
 end
 
 module DatabaseManagement
+
+  def push_to_database(object)
+    #push the item to the database
+  end
 end
 
 # Billing instructions: 
