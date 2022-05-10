@@ -212,6 +212,10 @@ class CallList # Collaborator object to Gig
     @positions = parse(gig_request_xml)
   end
 
+  private
+
+  attr_reader :positions
+
   def parse(xml)
     # output = {}
     # file.each_line do |line1, line2|
@@ -224,10 +228,6 @@ class CallList # Collaborator object to Gig
   def to_s
     positions
   end
-
-  private
-
-  attr_reader :positions
 end
 
 
@@ -248,9 +248,32 @@ class BookingSystem # Orchestration system
     client = get_client(gig_request_xml)
     venue = get_venue(gig_request_xml)
     date = get_date(gig_request_xml) 
+    call_time = get_call_time(gig_request_xml)
     call_list = get_call_list(gig_request_xml)
-    call_time = get_call_time(gig_request_xml) 
     Gig.new(client, venue, date, call_time, call_list)
+  end
+
+  def get_client(gig_request_xml)
+    # returns client as a Client.new object
+    # OR ACCESSES DATABASE TO PULL EXISTING OBJECT?
+  end
+
+  def get_venue(gig_request_xml)
+    # returns venue as a Venue.new object
+    # OR ACCESSES DATABASE TO PULL EXISTING OBJECT?
+  end
+
+  def get_date(gig_request_xml)
+    # returns date as a Date.new object
+  end
+
+  def get_call_list(gig_request_xml)
+    # returns call_list as a CallList.new object
+    CallList.new(gig_request_xml)
+  end
+
+  def get_call_time(gig_request_xml)
+    # returns call_time as a string
   end
 
   def add_gig_to_calendar
@@ -286,7 +309,8 @@ class BookingSystem # Orchestration system
   end
 end
 
-
+module DatabaseManagement
+end
 
 # Billing instructions: 
 # Send an invoice with your name, phone number, email, and billing/home address
