@@ -121,7 +121,7 @@ class Gig # Collaborator objects include: Client, Venue, Date, CallList
     call_list[position] = nil
   end
 
-  def call_list_filled?(call_list)
+  def call_list_filled?
     call_list.all? {|position, filled| filled }
   end
 
@@ -150,7 +150,8 @@ class Gig # Collaborator objects include: Client, Venue, Date, CallList
 
   private
   
-  attr_writer :call_list, :notes
+  attr_accessor :call_list 
+  attr_write :notes
 end
 
 class Client # Collaborator object to Gig, BookingSystem
@@ -244,7 +245,12 @@ class BookingSystem # Orchestration system
   end
 
   def create_gig(gig_request_xml)
-    
+    client = get_client(gig_request_xml)
+    venue = get_venue(gig_request_xml)
+    date = get_date(gig_request_xml) 
+    call_list = get_call_list(gig_request_xml)
+    call_time = get_call_time(gig_request_xml) 
+    Gig.new(client, venue, date, call_time, call_list)
   end
 
   def add_gig_to_calendar
