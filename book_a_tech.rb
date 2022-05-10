@@ -99,6 +99,12 @@ class Gig # Collaborator objects include: Client, Venue, Date, CallList
     call_list.all? {|position, filled| filled }
   end
 
+  def display_call_list 
+    # returns an array of all the techs on the call
+    techs = call_list.values.delete(nil)
+    techs
+  end
+
   def add_notes(string)
     notes = string
   end
@@ -114,12 +120,6 @@ class Gig # Collaborator objects include: Client, Venue, Date, CallList
 
   def description
     "CREW CALL for #{self.date} @ #{self.venue} #{self.call_time}\nNOTES: #{self.notes}"
-  end
-
-  def display_call_list
-    call_list.each do |position, _|
-      puts position
-    end
   end
 
   private
