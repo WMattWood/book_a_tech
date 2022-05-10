@@ -14,7 +14,7 @@
 # Justin (or any sw_client's admin person) out of the loop entirely... their function
 # would be purely for pruning and maintenance of the DB and answering human phone calls.
 
-
+############ THE CALENDAR - LIST OF DATES WITH GIGS ############
 class Calendar
   # interface with Google Calendar
   # https://developers.google.com/calendar/api/quickstart/ruby
@@ -63,33 +63,7 @@ class Calendar
   end
 end
 
-class Tech
-  
-  def initialize(name, email='bookings@justinsinbox.com', phone='justinsphonenumber', address, dept)
-    @name = name # tech name
-    @email = email # email
-    @phone = phone # phone number - used to send booking requests and reminders
-    @address = address # home/business address
-    # @dept = dept # [audio, lx, vid, carp, head-audio, head-lx, head-vid, head-carp]
-    @gigs = [] # array of gig objects for which tech has been confirmed
-    @days_off = [] # array of dates where the tech is not available.
-  end
-
-  def not_available(start_date, end_date=start_date)
-    dates = []
-    # from start_date until end_date, push each day into an array call 'dates'
-    dates.each do |day|
-      days_off << day
-    end
-  end
-
-  private
-
-  attr_writer :days_off
-end
-
-
-
+############# THE GIGS ##############
 class Gig # Collaborator objects include: Client, Venue, Date, CallList
   # Similar to notes on CallList below, this object may need to connect with
   # a webform of some kind.  Information pulled from the webform could include
@@ -152,6 +126,32 @@ class Gig # Collaborator objects include: Client, Venue, Date, CallList
   
   attr_accessor :call_list 
   attr_write :notes
+end
+
+############# THE THINGS FOR THE GIGS ##############
+class Tech
+  
+  def initialize(name, email='bookings@justinsinbox.com', phone='justinsphonenumber', address, dept)
+    @name = name # tech name
+    @email = email # email
+    @phone = phone # phone number - used to send booking requests and reminders
+    @address = address # home/business address
+    # @dept = dept # [audio, lx, vid, carp, head-audio, head-lx, head-vid, head-carp]
+    @gigs = [] # array of gig objects for which tech has been confirmed
+    @days_off = [] # array of dates where the tech is not available.
+  end
+
+  def not_available(start_date, end_date=start_date)
+    dates = []
+    # from start_date until end_date, push each day into an array call 'dates'
+    dates.each do |day|
+      days_off << day
+    end
+  end
+
+  private
+
+  attr_writer :days_off
 end
 
 class Client # Collaborator object to Gig, BookingSystem
@@ -236,7 +236,7 @@ class CallList # Collaborator object to Gig
   end
 end
 
-
+######### THE WAY TO GET THE GIGS INTO THE CALENDAR #########
 class BookingSystem # Orchestration system
 include DatabaseManagement
 include MessageSystem
@@ -318,6 +318,16 @@ include MessageSystem
   end
 end
 
+# Billing instructions for techs: 
+# Send an invoice with your name, phone number, email, and billing/home address
+# On the invoice, bill to as follows:
+# "CLIENT NAME"
+# c/o "Responsable"
+# "Client Billing Address"
+# "Client Phone"
+# Send it to the client email
+# Address the email to the responsable (ie. 'Dear Ms. Jolene', or 'Hi Corey,')
+
 module DatabaseManagement
 
   def push_to_database(object)
@@ -337,12 +347,8 @@ module MessageSystem
   end
 end
 
-# Billing instructions: 
-# Send an invoice with your name, phone number, email, and billing/home address
-# On the invoice, bill to as follows:
-# "CLIENT NAME"
-# c/o "Responsable"
-# "Client Billing Address"
-# "Client Phone"
-# Send it to the client email
-# Address the email to the responsable (ie. 'Dear Ms. Jolene', or 'Hi Corey,')
+# Databases?
+# - techs
+# - clients
+# - venues
+# - booked dates
